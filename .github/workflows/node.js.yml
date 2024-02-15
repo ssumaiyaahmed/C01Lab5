@@ -42,4 +42,4 @@
               - run: mongodb-runner start
               - run: npm start &
               - run: npm test
-              - run: mongodb-runner stop -all
+              - run: mongodb-runner stop --all
