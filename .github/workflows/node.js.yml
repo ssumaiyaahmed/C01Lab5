@@ -17,16 +17,17 @@
           defaults:
               run:
                   working-directory: ./quirknotes/backend
+        
+          strategy:
+              matrix:
+                  node-version: [20.x]
+
           services:
             mongodb:
               image: mongo
               ports:
                 - 27017:27017
-              options: --health-cmd "mongo --eval 'db.stats()'"
-        
-          strategy:
-              matrix:
-                  node-version: [20.x]
+              options: --name mongodb
 
           steps:
               - uses: actions/checkout@v3
@@ -35,16 +36,10 @@
                 uses: actions/setup-node@v3
                 with:
                   node-version: ${{ matrix.node-version }}
-
-              - name: Wait for MongoDB to start
-                run: |
-                  echo "Waiting for MongoDB to start..."
-                  until nc -z localhost 27017; do
-                    echo "MongoDB is not ready yet. Retrying in 5 seconds..."
-                    sleep 5
-                  done
-                  echo "MongoDB is ready!"
                   
               - run: npm i
-              - run: mongod --dbpath=./data/db
+              - run: npm install mongodb-runner -g
+              - run: mongodb-runner start
+              - run: npm start &
               - run: npm test
+              - run: mongodb-runner stop -all
