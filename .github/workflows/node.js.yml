@@ -35,8 +35,6 @@
                 uses: supercharge/mongodb-github-action@1.10.0
                 with:
                   mongodb-version: ${{ matrix.mongodb-version }}
-                  mongodb-replica-set: test-rs
-                  mongodb-port: 4000
 
               - run: npm i
               - run: npm test
