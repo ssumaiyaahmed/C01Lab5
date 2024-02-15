@@ -26,8 +26,7 @@
             mongodb:
               image: mongo
               ports:
-                - 4000:4000
-              options: --health-cmd "mongo --eval 'db.stats()'"
+                - 27017:4000
             
           steps:
               - uses: actions/checkout@v3
