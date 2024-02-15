@@ -22,11 +22,6 @@
               matrix:
                   node-version: [20.x]
                   mongodb-version: ['7.0']
-          services:
-            mongodb:
-              image: mongo
-              ports:
-                - 27017:4000
             
           steps:
               - uses: actions/checkout@v3
@@ -42,6 +37,7 @@
                   mongodb-version: ${{ matrix.mongodb-version }}
                   mongodb-port: 4000
                   
-              - run: curl http://localhost:4000
               - run: npm i
               - run: npm test
+                env:
+                  CI: true
