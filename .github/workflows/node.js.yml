@@ -39,4 +39,5 @@
                   
               - run: curl http://localhost:4000
               - run: npm i
+              - run: npm run dev
               - run: npm test
