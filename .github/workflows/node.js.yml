@@ -22,7 +22,13 @@
               matrix:
                   node-version: [20.x]
                   mongodb-version: ['7.0']
-
+          services:
+            mongodb:
+              image: mongo
+              ports:
+                - 4000:4000
+              options: --health-cmd "mongo --eval 'db.stats()'"
+            
           steps:
               - uses: actions/checkout@v3
 
@@ -39,5 +45,4 @@
                   
               - run: curl http://localhost:4000
               - run: npm i
-              - run: npm run dev
               - run: npm test
