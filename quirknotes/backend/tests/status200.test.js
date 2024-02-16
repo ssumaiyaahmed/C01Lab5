@@ -6,9 +6,9 @@ test("1+2=3, empty array is empty", () => {
   const SERVER_URL = "http://localhost:4000";
 
 
-  test("/patchNote - Patch with content and title", async () => {
+  test("/patchNote - Patch with content and title", async (entry) => {
     // Code here
-    const noteId = "65ced7d8124be130ed739d98";
+    const noteId = entry._id;
     const title = "NoteTitleTestPatch";
     const content = "NoteTitleContentPatch";
   
@@ -29,12 +29,12 @@ test("1+2=3, empty array is empty", () => {
     expect(patchNoteBody.response).toStrictEqual(`Document with ID ${noteId} patched.`);
   });
   
-  test("/patchNote - Patch with just title", async () => {
+  test("/patchNote - Patch with just title", async (entry) => {
     // Code here
-    const noteId = "65ced7d8124be130ed739d98";
+    //const noteId = "65ced7d8124be130ed739d98";
     const title = "NoteTitleTestPatch";
   
-    const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${noteId}`, {
+    const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${entry._id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +47,7 @@ test("1+2=3, empty array is empty", () => {
     const patchNoteBody = await patchNoteRes.json();
   
     expect(patchNoteRes.status).toBe(200);
-    expect(patchNoteBody.response).toStrictEqual(`Document with ID ${noteId} patched.`);
+    expect(patchNoteBody.response).toStrictEqual(`Document with ID ${entry._id} patched.`);
   });
   
   test("/patchNote - Patch with just content", async () => {
