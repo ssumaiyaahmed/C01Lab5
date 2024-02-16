@@ -6,6 +6,118 @@ test("1+2=3, empty array is empty", () => {
   const SERVER_URL = "http://localhost:4000";
 
 
+  test("/postNote - Post a note", async () => {
+    const title = "NoteTitleTest";
+    const content = "NoteTitleContent";
+  
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+      }),
+    });
+  
+    const postNoteBody = await postNoteRes.json();
+  
+    expect(postNoteRes.status).toBe(200);
+    expect(postNoteBody.response).toBe("Note added succesfully.");
+  
+    
+  });
+
+  test("/getAllNotes - Return list of zero notes for getAllNotes", async () => {
+    // Code here
+    const getAllNotesRes = await fetch(`${SERVER_URL}/getAllNotes`, {
+      method: "GET"
+    });
+  
+    const getAllNotesBody = await getAllNotesRes.json();
+    const empty_arr = [];
+    expect(getAllNotesRes.status).toBe(200);
+    expect(getAllNotesBody.response).toStrictEqual(empty_arr);
+  
+  });
+
+  test("/getAllNotes - Return list of two notes for getAllNotes", async () => {
+    // Code here
+    //******not correct response from backend?? */
+  
+    const title1 = "NoteTitleTest1";
+    const content1 = "NoteTitleContent1";
+  
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title1,
+        content: content1,
+      }),
+    });
+  
+    const title2 = "NoteTitleTest2";
+    const content2 = "NoteTitleContent2";
+  
+    const postNoteRes2 = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title2,
+        content: content2,
+      }),
+    });
+  
+  
+    const getAllNotesRes = await fetch(`${SERVER_URL}/getAllNotes`, {
+      method: "GET"
+    });
+  
+    const getAllNotesBody = await getAllNotesRes.json();
+    const empty_arr = [];
+    expect(getAllNotesRes.status).toBe(200);
+    expect(getAllNotesBody.response).toStrictEqual(empty_arr);
+    
+  });
+  
+  test("/deleteNote - Delete a note", async () => {
+
+
+    const title = "NoteTitleTest";
+    const content = "NoteTitleContent";
+
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+      }),
+    });
+
+    const postNoteBody = await postNoteRes.json();
+
+    const noteId = postNoteBody.insertedId;
+
+    const deleteNoteRes = await fetch(`${SERVER_URL}/deleteNote/${noteId}`, {
+      method: "DELETE"
+    });
+  
+    const deleteNoteBody = await deleteNoteRes.json();
+  
+    expect(deleteNoteRes.status).toBe(200);
+    expect(deleteNoteBody.response).toStrictEqual(`Document with ID ${noteId} deleted.`);
+  
+  });
+
   test("/patchNote - Patch with content and title", async () => {
     // Code here
 
@@ -125,74 +237,16 @@ test("1+2=3, empty array is empty", () => {
     expect(patchNoteBody.response).toStrictEqual(`Document with ID ${noteId} patched.`);
   });
 
-  test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
-    // Code here
-    const noteId = "65ced7d8124be130ed739d98";
-    const updateColorRes = await fetch(`${SERVER_URL}/updateNoteColor/${noteId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        color: '#FF0000'
-      }),
-    });
   
-    const updateColorBody = await updateColorRes.json();
-  
-    expect(updateColorRes.status).toBe(200);
-    expect(updateColorBody.message).toStrictEqual('Note color updated successfully.');
-  
+test("/deleteAllNotes - Delete one note", async () => {
+  // Code here
+
+  await fetch(`${SERVER_URL}/deleteAllNotes`, {
+    method: "DELETE"
   });
 
-  test("/deleteNote - Delete a note", async () => {
-
-
-    const title = "NoteTitleTest";
-    const content = "NoteTitleContent";
-
-    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-      }),
-    });
-
-    const postNoteBody = await postNoteRes.json();
-
-    const noteId = postNoteBody.insertedId;
-
-    const deleteNoteRes = await fetch(`${SERVER_URL}/deleteNote/${noteId}`, {
-      method: "DELETE"
-    });
-  
-    const deleteNoteBody = await deleteNoteRes.json();
-  
-    expect(deleteNoteRes.status).toBe(200);
-    expect(deleteNoteBody.response).toStrictEqual(`Document with ID ${noteId} deleted.`);
-  
-  });
-
-  test("/getAllNotes - Return list of zero notes for getAllNotes", async () => {
-    // Code here
-    const getAllNotesRes = await fetch(`${SERVER_URL}/getAllNotes`, {
-      method: "GET"
-    });
-  
-    const getAllNotesBody = await getAllNotesRes.json();
-    const empty_arr = [];
-    expect(getAllNotesRes.status).toBe(200);
-    expect(getAllNotesBody.response).toStrictEqual(empty_arr);
-  
-  });
-
-  test("/postNote - Post a note", async () => {
-  const title = "NoteTitleTest";
-  const content = "NoteTitleContent";
+  const title1 = "NoteTitleTest1";
+  const content1 = "NoteTitleContent1";
 
   const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
     method: "POST",
@@ -200,21 +254,11 @@ test("1+2=3, empty array is empty", () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      title: title,
-      content: content,
+      title: title1,
+      content: content1,
     }),
   });
 
-  const postNoteBody = await postNoteRes.json();
-
-  expect(postNoteRes.status).toBe(200);
-  expect(postNoteBody.response).toBe("Note added succesfully.");
-
-  
-});
-
-test("/deleteAllNotes - Delete one note", async () => {
-  // Code here
   const delAllNotesRes = await fetch(`${SERVER_URL}/deleteAllNotes`, {
     method: "DELETE"
   });
@@ -280,47 +324,23 @@ test("/deleteAllNotes - Delete three notes", async () => {
   expect(delAllNotesBody.response).toBe("3 note(s) deleted.");
 });
 
-test("/getAllNotes - Return list of two notes for getAllNotes", async () => {
+test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
   // Code here
-  //******not correct response from backend?? */
-
-  const title1 = "NoteTitleTest1";
-  const content1 = "NoteTitleContent1";
-
-  const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
-    method: "POST",
+  const noteId = "65ced7d8124be130ed739d98";
+  const updateColorRes = await fetch(`${SERVER_URL}/updateNoteColor/${noteId}`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      title: title1,
-      content: content1,
+      color: '#FF0000'
     }),
   });
 
-  const title2 = "NoteTitleTest2";
-  const content2 = "NoteTitleContent2";
+  const updateColorBody = await updateColorRes.json();
 
-  const postNoteRes2 = await fetch(`${SERVER_URL}/postNote`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      title: title2,
-      content: content2,
-    }),
-  });
+  expect(updateColorRes.status).toBe(200);
+  expect(updateColorBody.message).toStrictEqual('Note color updated successfully.');
 
-
-  const getAllNotesRes = await fetch(`${SERVER_URL}/getAllNotes`, {
-    method: "GET"
-  });
-
-  const getAllNotesBody = await getAllNotesRes.json();
-  const empty_arr = [];
-  expect(getAllNotesRes.status).toBe(200);
-  expect(getAllNotesBody.response).toStrictEqual(empty_arr);
-  
 });
 
