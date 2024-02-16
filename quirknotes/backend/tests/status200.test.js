@@ -8,7 +8,7 @@ test("1+2=3, empty array is empty", () => {
 
   test("/patchNote - Patch with content and title", async () => {
     // Code here
-    const noteId = "65ced404da6aa3930974203b";
+    const noteId = "65ced511e39b945dc2848f5e";
     const title = "NoteTitleTestPatch";
     const content = "NoteTitleContentPatch";
   
@@ -31,7 +31,7 @@ test("1+2=3, empty array is empty", () => {
   
   test("/patchNote - Patch with just title", async () => {
     // Code here
-    const noteId = "65ced404da6aa3930974203b";
+    const noteId = "65ced511e39b945dc2848f5e";
     const title = "NoteTitleTestPatch";
   
     const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${noteId}`, {
@@ -52,7 +52,7 @@ test("1+2=3, empty array is empty", () => {
   
   test("/patchNote - Patch with just content", async () => {
     // Code here
-    const noteId = "65ced404da6aa3930974203b";
+    const noteId = "65ced511e39b945dc2848f5e";
     const content = "NoteTitleContentPatch";
   
     const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${noteId}`, {
@@ -73,7 +73,7 @@ test("1+2=3, empty array is empty", () => {
 
   test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
     // Code here
-    const noteId = "65ced404da6aa3930974203b";
+    const noteId = "65ced511e39b945dc2848f5e";
     const updateColorRes = await fetch(`${SERVER_URL}/updateNoteColor/${noteId}`, {
       method: "PATCH",
       headers: {
@@ -93,7 +93,7 @@ test("1+2=3, empty array is empty", () => {
 
   test("/deleteNote - Delete a note", async () => {
 
-    const noteId = "65ced404da6aa3930974203b";
+    const noteId = "65ced511e39b945dc2848f5e";
     const deleteNoteRes = await fetch(`${SERVER_URL}/deleteNote/${noteId}`, {
       method: "DELETE"
     });
