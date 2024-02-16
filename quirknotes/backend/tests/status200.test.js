@@ -6,11 +6,30 @@ test("1+2=3, empty array is empty", () => {
   const SERVER_URL = "http://localhost:4000";
 
 
-  test("/patchNote - Patch with content and title", async (entry) => {
+  test("/patchNote - Patch with content and title", async () => {
     // Code here
-    const noteId = entry._id;
-    const title = "NoteTitleTestPatch";
-    const content = "NoteTitleContentPatch";
+
+    const title = "NoteTitleTest";
+    const content = "NoteTitleContent";
+
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+      }),
+    });
+
+    const postNoteBody = await postNoteRes.json();
+
+    const noteId = postNoteBody.insertedId;
+    
+    const patchTitle = "NoteTitleTestPatch";
+    const patchContent = "NoteTitleContentPatch";
+    
   
     const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${noteId}`, {
       method: "PATCH",
@@ -18,8 +37,8 @@ test("1+2=3, empty array is empty", () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: title,
-        content: content,
+        title: patchTitle,
+        content: patchContent,
       }),
     });
   
@@ -29,31 +48,28 @@ test("1+2=3, empty array is empty", () => {
     expect(patchNoteBody.response).toStrictEqual(`Document with ID ${noteId} patched.`);
   });
   
-  test("/patchNote - Patch with just title", async (entry) => {
+  test("/patchNote - Patch with just title", async () => {
     // Code here
-    //const noteId = "65ced7d8124be130ed739d98";
-    const title = "NoteTitleTestPatch";
-  
-    const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${entry._id}`, {
-      method: "PATCH",
+
+    const title = "NoteTitleTest";
+    const content = "NoteTitleContent";
+
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         title: title,
+        content: content,
       }),
     });
-  
-    const patchNoteBody = await patchNoteRes.json();
-  
-    expect(patchNoteRes.status).toBe(200);
-    expect(patchNoteBody.response).toStrictEqual(`Document with ID ${entry._id} patched.`);
-  });
-  
-  test("/patchNote - Patch with just content", async () => {
-    // Code here
-    const noteId = "65ced7d8124be130ed739d98";
-    const content = "NoteTitleContentPatch";
+
+    const postNoteBody = await postNoteRes.json();
+
+    const noteId = postNoteBody.insertedId;
+
+    const patchedTitle = "NoteTitleTestPatch";
   
     const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${noteId}`, {
       method: "PATCH",
@@ -61,7 +77,45 @@ test("1+2=3, empty array is empty", () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        title: patchedTitle,
+      }),
+    });
+  
+    const patchNoteBody = await patchNoteRes.json();
+  
+    expect(patchNoteRes.status).toBe(200);
+    expect(patchNoteBody.response).toStrictEqual(`Document with ID ${noteId} patched.`);
+  });
+  
+  test("/patchNote - Patch with just content", async () => {
+    // Code here
+    const title = "NoteTitleTest";
+    const content = "NoteTitleContent";
+
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
         content: content,
+      }),
+    });
+
+    const postNoteBody = await postNoteRes.json();
+
+    const noteId = postNoteBody.insertedId;
+
+    const patchedContent = "NoteTitleContentPatch";
+  
+    const patchNoteRes = await fetch(`${SERVER_URL}/patchNote/${noteId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: patchedContent,
       }),
     });
   
@@ -93,7 +147,25 @@ test("1+2=3, empty array is empty", () => {
 
   test("/deleteNote - Delete a note", async () => {
 
-    const noteId = "65ced7d8124be130ed739d98";
+
+    const title = "NoteTitleTest";
+    const content = "NoteTitleContent";
+
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+      }),
+    });
+
+    const postNoteBody = await postNoteRes.json();
+
+    const noteId = postNoteBody.insertedId;
+
     const deleteNoteRes = await fetch(`${SERVER_URL}/deleteNote/${noteId}`, {
       method: "DELETE"
     });
