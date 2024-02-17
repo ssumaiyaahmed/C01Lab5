@@ -6,6 +6,12 @@ test("1+2=3, empty array is empty", () => {
   const SERVER_URL = "http://localhost:4000";
 
 
+  beforeEach(async () => {
+    await fetch(`${SERVER_URL}/deleteAllNotes`, {
+      method: "DELETE"
+    });
+  });
+
   test("/postNote - Post a note", async () => {
     const title = "NoteTitleTest";
     const content = "NoteTitleContent";
@@ -31,6 +37,7 @@ test("1+2=3, empty array is empty", () => {
 
   test("/getAllNotes - Return list of zero notes for getAllNotes", async () => {
     // Code here
+
     const getAllNotesRes = await fetch(`${SERVER_URL}/getAllNotes`, {
       method: "GET"
     });
@@ -49,6 +56,7 @@ test("1+2=3, empty array is empty", () => {
     const title1 = "NoteTitleTest1";
     const content1 = "NoteTitleContent1";
   
+    
     const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
       method: "POST",
       headers: {
@@ -59,10 +67,15 @@ test("1+2=3, empty array is empty", () => {
         content: content1,
       }),
     });
-  
+    
+    const postNoteBody = await postNoteRes.json();
+    const postNoteId = postNoteBody.insertedId;
+    createdAt1 = postNoteRes.createdAt;
+
     const title2 = "NoteTitleTest2";
     const content2 = "NoteTitleContent2";
   
+    
     const postNoteRes2 = await fetch(`${SERVER_URL}/postNote`, {
       method: "POST",
       headers: {
@@ -73,16 +86,24 @@ test("1+2=3, empty array is empty", () => {
         content: content2,
       }),
     });
-  
+    
+    const postNoteBody2 = await postNoteRes2.json();
+    const postNoteId2 = postNoteBody2.insertedId;
+    createdAt2 = postNoteRes2.createdAt;
   
     const getAllNotesRes = await fetch(`${SERVER_URL}/getAllNotes`, {
       method: "GET"
     });
   
     const getAllNotesBody = await getAllNotesRes.json();
-    const empty_arr = [];
     expect(getAllNotesRes.status).toBe(200);
-    expect(getAllNotesBody.response).toStrictEqual(empty_arr);
+    expect(getAllNotesBody.response.length).toBe(2);
+    expect(getAllNotesBody.response[0]._id).toStrictEqual(postNoteId);
+    expect(getAllNotesBody.response[1]._id).toStrictEqual(postNoteId2);
+    expect(getAllNotesBody.response[0].title).toStrictEqual(title1);
+    expect(getAllNotesBody.response[1].title).toStrictEqual(title2);
+    expect(getAllNotesBody.response[0].content).toStrictEqual(content1);
+    expect(getAllNotesBody.response[1].content).toStrictEqual(content2);
     
   });
   
@@ -241,10 +262,7 @@ test("1+2=3, empty array is empty", () => {
 test("/deleteAllNotes - Delete one note", async () => {
   // Code here
 
-  await fetch(`${SERVER_URL}/deleteAllNotes`, {
-    method: "DELETE"
-  });
-
+  
   const title1 = "NoteTitleTest1";
   const content1 = "NoteTitleContent1";
 
@@ -326,7 +344,24 @@ test("/deleteAllNotes - Delete three notes", async () => {
 
 test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
   // Code here
-  const noteId = "65ced7d8124be130ed739d98";
+  const title = "NoteTitleTest";
+    const content = "NoteTitleContent";
+
+    const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+      }),
+    });
+
+    const postNoteBody = await postNoteRes.json();
+
+    const noteId = postNoteBody.insertedId;
+
   const updateColorRes = await fetch(`${SERVER_URL}/updateNoteColor/${noteId}`, {
     method: "PATCH",
     headers: {
